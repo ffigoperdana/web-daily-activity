@@ -1,0 +1,21 @@
+{
+  "name": "web-daily-activity",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "vapid:generate": "node scripts/generate-vapid.mjs",
+    "test": "pnpm -r run test",
+    "test:unit": "pnpm --filter tracker run test:unit && pnpm --filter push-service run test",
+    "test:property": "pnpm --filter tracker run test:property && pnpm --filter push-service run test:property",
+    "test:property:long": "pnpm --filter tracker run test:property:long && pnpm --filter push-service run test:property:long",
+    "test:integration": "pnpm --filter push-service run test:integration",
+    "test:e2e": "pnpm --filter tracker run test:e2e",
+    "build": "pnpm -r run build"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

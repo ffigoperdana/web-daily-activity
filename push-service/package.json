@@ -1,0 +1,28 @@
+{
+  "name": "push-service",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest --run",
+    "test:property": "vitest --run tests/properties",
+    "test:property:long": "FAST_CHECK_NUM_RUNS=1000 vitest --run tests/properties",
+    "test:integration": "vitest --run tests/integration",
+    "secret:vapid": "wrangler secret put VAPID_PRIVATE_KEY",
+    "secret:dispatch": "wrangler secret put DISPATCH_SECRET"
+  },
+  "dependencies": {
+    "jose": "^5.9.6",
+    "@block65/webcrypto-web-push": "^1.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.99.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8",
+    "@cloudflare/vitest-pool-workers": "^0.5.41",
+    "fast-check": "^3.23.2",
+    "@cloudflare/workers-types": "^4.20241230.0"
+  }
+}

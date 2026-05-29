@@ -1,0 +1,21 @@
+name = "dat-push-service"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[triggers]
+crons = ["* * * * *"]
+
+[[kv_namespaces]]
+binding = "KV"
+id = "2dabb5d932c54681af8000fcb271b757"
+
+[vars]
+GOOGLE_CLIENT_ID = "198622888924-5m1lv2jit4e6n5fmk6e1skf2eprh2mbv.apps.googleusercontent.com"
+OWNER_EMAIL = "perdanaputrafigo@gmail.com"
+VAPID_PUBLIC_KEY = "BBfVMwMbCFN1rMkDu9iTIifbEx08fGEb4lnem5CXENT58IyN2mXkfAoT1r05SCxHSp90nkjF4kX25-z66ygWB_A"
+VAPID_SUBJECT = "mailto:perdanaputrafigo@gmail.com"
+
+# Secrets (set via `wrangler secret put`):
+# - VAPID_PRIVATE_KEY: Private key for signing VAPID JWTs
+# - DISPATCH_SECRET: Shared secret required by POST /dispatch

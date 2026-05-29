@@ -1,0 +1,9 @@
+node_modules
+.git
+.kiro
+dist
+coverage
+playwright-report
+.wrangler
+.env.local
+*.log

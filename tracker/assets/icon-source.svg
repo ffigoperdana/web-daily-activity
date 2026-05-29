@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="#0f172a"/>
+  <!-- Calendar body -->
+  <rect x="96" y="144" width="320" height="280" rx="24" fill="none" stroke="#ffffff" stroke-width="20"/>
+  <!-- Calendar top bar -->
+  <rect x="96" y="144" width="320" height="64" rx="24" fill="#ffffff"/>
+  <rect x="96" y="184" width="320" height="24" fill="#ffffff"/>
+  <!-- Calendar rings -->
+  <rect x="176" y="112" width="20" height="64" rx="10" fill="#ffffff"/>
+  <rect x="316" y="112" width="20" height="64" rx="10" fill="#ffffff"/>
+  <!-- Checkmark -->
+  <polyline points="192,320 240,368 320,272" fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
