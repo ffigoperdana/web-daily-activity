@@ -44,7 +44,6 @@ export function ActivityForm() {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    // Clear related error on change
     if (name === 'description') {
       setErrors((prev) => {
         const next = { ...prev };
@@ -64,7 +63,6 @@ export function ActivityForm() {
   const handleAllDayToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const allDay = e.target.checked;
     setForm((prev) => ({ ...prev, allDay }));
-    // Clear time error when switching to all-day
     if (allDay) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -79,7 +77,6 @@ export function ActivityForm() {
     setConfirmation(null);
     setSubmitError(null);
 
-    // Build ActivityInput from form state
     const input: ActivityInput = form.allDay
       ? { date: form.date, description: form.description, allDay: true }
       : {
@@ -90,7 +87,6 @@ export function ActivityForm() {
           endTime: form.endTime,
         };
 
-    // Validate
     const result = validateActivity(input);
     if (!result.ok) {
       const newErrors: Record<string, string> = {};
@@ -107,7 +103,6 @@ export function ActivityForm() {
       return;
     }
 
-    // Submit
     setForm((prev) => ({ ...prev, submitting: true }));
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -118,7 +113,6 @@ export function ActivityForm() {
 
     if (insertResult.ok) {
       setConfirmation(`Aktivitas berhasil disimpan untuk tanggal ${form.date}`);
-      // Clear description, keep date
       setForm((prev) => ({ ...prev, description: '' }));
       setErrors({});
     } else {
@@ -127,98 +121,106 @@ export function ActivityForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} data-testid="activity-form" aria-label="Form aktivitas">
-      {confirmation && (
-        <div data-testid="confirmation" role="status">
-          {confirmation}
-        </div>
-      )}
-
-      {submitError && (
-        <div data-testid="submit-error" role="alert">
-          {submitError}
-        </div>
-      )}
-
-      <div>
-        <label htmlFor="activity-date">Tanggal</label>
-        <input
-          id="activity-date"
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="activity-description">Deskripsi</label>
-        <textarea
-          id="activity-description"
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          aria-invalid={!!errors.description}
-          aria-describedby={errors.description ? 'desc-error' : undefined}
-        />
-        {errors.description && (
-          <p id="desc-error" role="alert" data-testid="error-description">
-            {errors.description}
-          </p>
+    <div className="card">
+      <form onSubmit={handleSubmit} data-testid="activity-form" aria-label="Form aktivitas">
+        {confirmation && (
+          <div className="alert alert-success" data-testid="confirmation" role="status">
+            {confirmation}
+          </div>
         )}
-      </div>
 
-      <div>
-        <label htmlFor="activity-allday">Seharian</label>
-        <input
-          id="activity-allday"
-          type="checkbox"
-          name="allDay"
-          checked={form.allDay}
-          onChange={handleAllDayToggle}
-        />
-      </div>
-
-      {!form.allDay && (
-        <>
-          <div>
-            <label htmlFor="activity-start-time">Waktu mulai</label>
-            <input
-              id="activity-start-time"
-              type="time"
-              name="startTime"
-              value={form.startTime}
-              onChange={handleChange}
-            />
+        {submitError && (
+          <div className="alert alert-error" data-testid="submit-error" role="alert">
+            {submitError}
           </div>
+        )}
 
-          <div>
-            <label htmlFor="activity-end-time">Waktu selesai</label>
-            <input
-              id="activity-end-time"
-              type="time"
-              name="endTime"
-              value={form.endTime}
-              onChange={handleChange}
-              aria-invalid={!!errors.time}
-              aria-describedby={errors.time ? 'time-error' : undefined}
-            />
-            {errors.time && (
-              <p id="time-error" role="alert" data-testid="error-time">
-                {errors.time}
-              </p>
-            )}
+        <div className="form-group">
+          <label htmlFor="activity-date" className="form-label">Tanggal</label>
+          <input
+            id="activity-date"
+            className="form-input"
+            type="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="activity-description" className="form-label">Deskripsi</label>
+          <textarea
+            id="activity-description"
+            className="form-textarea"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            placeholder="Apa yang kamu kerjakan hari ini?"
+            aria-invalid={!!errors.description}
+            aria-describedby={errors.description ? 'desc-error' : undefined}
+          />
+          {errors.description && (
+            <p id="desc-error" className="form-error" role="alert" data-testid="error-description">
+              {errors.description}
+            </p>
+          )}
+        </div>
+
+        <div className="form-check">
+          <input
+            id="activity-allday"
+            type="checkbox"
+            name="allDay"
+            checked={form.allDay}
+            onChange={handleAllDayToggle}
+          />
+          <label htmlFor="activity-allday">Seharian</label>
+        </div>
+
+        {!form.allDay && (
+          <div className="time-row">
+            <div className="form-group">
+              <label htmlFor="activity-start-time" className="form-label">Waktu mulai</label>
+              <input
+                id="activity-start-time"
+                className="form-input"
+                type="time"
+                name="startTime"
+                value={form.startTime}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="activity-end-time" className="form-label">Waktu selesai</label>
+              <input
+                id="activity-end-time"
+                className="form-input"
+                type="time"
+                name="endTime"
+                value={form.endTime}
+                onChange={handleChange}
+                aria-invalid={!!errors.time}
+                aria-describedby={errors.time ? 'time-error' : undefined}
+              />
+              {errors.time && (
+                <p id="time-error" className="form-error" role="alert" data-testid="error-time">
+                  {errors.time}
+                </p>
+              )}
+            </div>
           </div>
-        </>
-      )}
+        )}
 
-      <button
-        type="submit"
-        disabled={form.submitting}
-        data-testid="submit-button"
-      >
-        {form.submitting ? 'Menyimpan…' : 'Simpan'}
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={form.submitting}
+          data-testid="submit-button"
+        >
+          {form.submitting ? 'Menyimpan…' : 'Simpan ke Calendar'}
+        </button>
+      </form>
+    </div>
   );
 }
