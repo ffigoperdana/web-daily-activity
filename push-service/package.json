@@ -7,9 +7,9 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "test": "vitest --run",
-    "test:property": "vitest --run tests/properties",
-    "test:property:long": "FAST_CHECK_NUM_RUNS=1000 vitest --run tests/properties",
-    "test:integration": "vitest --run tests/integration",
+    "test:property": "vitest --run tests/properties --passWithNoTests",
+    "test:property:long": "FAST_CHECK_NUM_RUNS=1000 vitest --run tests/properties --passWithNoTests",
+    "test:integration": "vitest --run tests/integration --passWithNoTests",
     "secret:vapid": "wrangler secret put VAPID_PRIVATE_KEY",
     "secret:dispatch": "wrangler secret put DISPATCH_SECRET"
   },
