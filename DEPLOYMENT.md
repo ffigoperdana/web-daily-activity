@@ -97,20 +97,18 @@ Or use a **GitHub webhook** to trigger on push:
 6. Build Pack: **Dockerfile**
 7. Dockerfile Location: `/Dockerfile`
 
-### 2. Configure Environment Variables
+### 2. Configure Build Environment Variables
 
-The Dockerfile copies `.env` from the repo root into the build context. Vite reads `VITE_*` vars from this file during `vite build`.
+In Coolify app settings → **Environment Variables** → **Build** tab, add:
 
-**Option A: Commit `.env` to the repo** (fine for public vars like client IDs — these get baked into the JS bundle anyway and are visible to anyone inspecting the PWA):
-
-```env
+```
 VITE_GOOGLE_CLIENT_ID=<your-client-id>
 VITE_OWNER_EMAIL=<your-email>
 VITE_VAPID_PUBLIC_KEY=<your-vapid-public-key>
-VITE_PUSH_SERVICE_URL=https://dat-push-service.workers.dev
+VITE_PUSH_SERVICE_URL=https://dat-push-service.username.workers.dev
 ```
 
-**Option B: Use Coolify's "Build Environment Variables"** feature to inject them at build time (Coolify writes them to the build context). In that case, update the Dockerfile to use `ARG` instead of `COPY .env`.
+These are passed as Docker `ARG` during build. Vite bakes them into the JS bundle.
 
 ### 3. Configure Domain
 
