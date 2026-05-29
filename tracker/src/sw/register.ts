@@ -60,7 +60,7 @@ export function registerServiceWorker(): void {
   });
 
   void navigator.serviceWorker
-    .register('/sw.js', { scope: '/' })
+    .register('/service-worker.js', { scope: '/' })
     .then((registration) => {
       // If there's already a waiting worker on page load, surface the prompt.
       if (registration.waiting) {

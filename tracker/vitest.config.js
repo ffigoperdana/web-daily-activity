@@ -4,6 +4,7 @@ export default defineConfig({
         environment: 'jsdom',
         setupFiles: ['./src/test-setup.ts'],
         globals: true,
+        exclude: ['tests/e2e/**', 'node_modules/**'],
     },
 });
 //# sourceMappingURL=vitest.config.js.map

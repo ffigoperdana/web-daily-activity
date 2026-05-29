@@ -12,6 +12,28 @@ import type { Env } from './env';
 /** Module-scope flag: once assertEnv succeeds, skip on subsequent requests. */
 let envChecked = false;
 
+/** Allowed origins for CORS. */
+const ALLOWED_ORIGINS = [
+  'https://daily.fgdev.tech',
+  'http://localhost:5173',
+  'http://localhost:4173',
+];
+
+/** Add CORS headers to a response. */
+function withCors(response: Response, origin: string | null): Response {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]!;
+  const headers = new Headers(response.headers);
+  headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  headers.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-Dispatch-Secret');
+  headers.set('Access-Control-Max-Age', '86400');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 /**
  * Route incoming HTTP requests to the appropriate handler.
  */
@@ -19,6 +41,11 @@ async function handleRequest(request: Request, env: Env, ctx: ExecutionContext):
   const url = new URL(request.url);
   const { pathname } = url;
   const method = request.method;
+
+  // Handle CORS preflight
+  if (method === 'OPTIONS') {
+    return new Response(null, { status: 204 });
+  }
 
   // Health check
   if (method === 'GET' && pathname === '/') {
@@ -74,6 +101,8 @@ async function handleRequest(request: Request, env: Env, ctx: ExecutionContext):
 
 export default {
   async fetch(request: Request, env: unknown, ctx: ExecutionContext): Promise<Response> {
+    const origin = request.headers.get('Origin');
+
     // Validate environment on first request after cold start
     if (!envChecked) {
       try {
@@ -82,17 +111,23 @@ export default {
       } catch (err) {
         if (err instanceof EnvError) {
           console.error('Push_Service misconfigured. Missing:', err.missing);
-          return misconfigured(err.missing);
+          return withCors(misconfigured(err.missing), origin);
         }
         throw err;
       }
     }
 
+    // Handle CORS preflight early
+    if (request.method === 'OPTIONS') {
+      return withCors(new Response(null, { status: 204 }), origin);
+    }
+
     try {
-      return await handleRequest(request, env as Env, ctx);
+      const response = await handleRequest(request, env as Env, ctx);
+      return withCors(response, origin);
     } catch (err) {
       if (err instanceof HttpError) {
-        return json(err.status, { error: err.message });
+        return withCors(json(err.status, { error: err.message }), origin);
       }
       throw err;
     }

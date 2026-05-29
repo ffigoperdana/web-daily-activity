@@ -1,4 +1,4 @@
-import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback, useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { SignIn } from './components/SignIn';
@@ -6,6 +6,7 @@ import { ActivityForm } from './components/ActivityForm';
 import { RemindersScreen } from './components/RemindersScreen';
 import { onUpdateAvailable, applyUpdate } from './sw/register';
 import { id } from './i18n/id';
+import './styles.css';
 function parseRoute() {
     const params = new URLSearchParams(window.location.search);
     const route = params.get('route');
@@ -13,13 +14,25 @@ function parseRoute() {
         return 'reminders';
     return 'form';
 }
+function ThemeToggle() {
+    const [dark, setDark] = useState(() => {
+        const saved = localStorage.getItem('tracker-theme');
+        if (saved)
+            return saved === 'dark';
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    });
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        localStorage.setItem('tracker-theme', dark ? 'dark' : 'light');
+    }, [dark]);
+    return (_jsx("button", { type: "button", className: "theme-toggle", onClick: () => setDark((d) => !d), "aria-label": dark ? 'Switch to light mode' : 'Switch to dark mode', children: dark ? '☀' : '☾' }));
+}
 function AppShell() {
     const { status } = useAuth();
     const [route, setRoute] = useState(parseRoute);
     const [offline, setOffline] = useState(!navigator.onLine);
     const [updateAvailable, setUpdateAvailable] = useState(false);
     const [toastDismissed, setToastDismissed] = useState(false);
-    // Listen for SW NAVIGATE postMessage
     useEffect(() => {
         const handler = (event) => {
             if (event.data && event.data.type === 'NAVIGATE') {
@@ -36,7 +49,6 @@ function AppShell() {
             navigator.serviceWorker?.removeEventListener('message', handler);
         };
     }, []);
-    // Online/offline listeners
     useEffect(() => {
         const goOffline = () => setOffline(true);
         const goOnline = () => setOffline(false);
@@ -47,7 +59,6 @@ function AppShell() {
             window.removeEventListener('online', goOnline);
         };
     }, []);
-    // Subscribe to SW update available
     useEffect(() => {
         const unsubscribe = onUpdateAvailable(() => {
             setUpdateAvailable(true);
@@ -60,11 +71,13 @@ function AppShell() {
     const handleReload = useCallback(() => {
         applyUpdate();
     }, []);
-    // Auth gate: show SignIn for any status that is not 'signed-in'
-    if (status !== 'signed-in') {
-        return (_jsxs(_Fragment, { children: [offline && (_jsx("div", { "data-testid": "offline-banner", role: "alert", children: id.tidak_ada_koneksi })), _jsx(SignIn, {})] }));
+    if (status === 'loading') {
+        return (_jsx("div", { className: "app-container", children: _jsx("div", { className: "loading-screen", "data-testid": "sign-in-loading", role: "status", "aria-busy": "true", children: _jsx("div", { className: "spinner" }) }) }));
     }
-    return (_jsxs(_Fragment, { children: [offline && (_jsx("div", { "data-testid": "offline-banner", role: "alert", children: id.tidak_ada_koneksi })), updateAvailable && !toastDismissed && (_jsxs("div", { "data-testid": "update-toast", role: "status", children: [_jsx("span", { children: id.versi_baru_tersedia }), _jsx("button", { type: "button", onClick: handleReload, "data-testid": "btn-reload", children: id.muat_ulang }), _jsx("button", { type: "button", onClick: handleDismissToast, "data-testid": "btn-dismiss-toast", "aria-label": "tutup", children: "\u00D7" })] })), route === 'form' && _jsx(ActivityForm, {}), route === 'reminders' && _jsx(RemindersScreen, {})] }));
+    if (status !== 'signed-in') {
+        return (_jsxs("div", { className: "app-container", children: [offline && (_jsx("div", { className: "offline-banner", "data-testid": "offline-banner", role: "alert", children: id.tidak_ada_koneksi })), _jsx(SignIn, {})] }));
+    }
+    return (_jsxs("div", { className: "app-container", children: [offline && (_jsx("div", { className: "offline-banner", "data-testid": "offline-banner", role: "alert", children: id.tidak_ada_koneksi })), updateAvailable && !toastDismissed && (_jsxs("div", { className: "update-toast", "data-testid": "update-toast", role: "status", children: [_jsx("span", { children: id.versi_baru_tersedia }), _jsx("button", { type: "button", className: "toast-action", onClick: handleReload, "data-testid": "btn-reload", children: id.muat_ulang }), _jsx("button", { type: "button", className: "toast-dismiss", onClick: handleDismissToast, "data-testid": "btn-dismiss-toast", "aria-label": "tutup", children: "\u00D7" })] })), _jsxs("header", { className: "app-header", children: [_jsx("h1", { className: "app-title", children: "Aktivitas" }), _jsx(ThemeToggle, {})] }), _jsxs("nav", { className: "tabs", children: [_jsx("button", { type: "button", className: `tab-btn ${route === 'form' ? 'active' : ''}`, onClick: () => setRoute('form'), children: "Catat" }), _jsx("button", { type: "button", className: `tab-btn ${route === 'reminders' ? 'active' : ''}`, onClick: () => setRoute('reminders'), children: "Pengingat" })] }), route === 'form' && _jsx(ActivityForm, {}), route === 'reminders' && _jsx(RemindersScreen, {})] }));
 }
 function App() {
     return (_jsx(AuthProvider, { children: _jsx(AppShell, {}) }));

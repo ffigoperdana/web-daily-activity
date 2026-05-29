@@ -5,6 +5,5 @@ dist
 coverage
 playwright-report
 .wrangler
-.env
 .env.local
 *.log
