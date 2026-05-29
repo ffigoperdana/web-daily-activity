@@ -39,9 +39,7 @@ export function ActivityForm() {
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     if (name === 'description') {
@@ -136,7 +134,9 @@ export function ActivityForm() {
         )}
 
         <div className="form-group">
-          <label htmlFor="activity-date" className="form-label">Tanggal</label>
+          <label htmlFor="activity-date" className="form-label">
+            Tanggal
+          </label>
           <input
             id="activity-date"
             className="form-input"
@@ -148,7 +148,9 @@ export function ActivityForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="activity-description" className="form-label">Deskripsi</label>
+          <label htmlFor="activity-description" className="form-label">
+            Deskripsi
+          </label>
           <textarea
             id="activity-description"
             className="form-textarea"
@@ -180,7 +182,9 @@ export function ActivityForm() {
         {!form.allDay && (
           <div className="time-row">
             <div className="form-group">
-              <label htmlFor="activity-start-time" className="form-label">Waktu mulai</label>
+              <label htmlFor="activity-start-time" className="form-label">
+                Waktu mulai
+              </label>
               <input
                 id="activity-start-time"
                 className="form-input"
@@ -192,7 +196,9 @@ export function ActivityForm() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="activity-end-time" className="form-label">Waktu selesai</label>
+              <label htmlFor="activity-end-time" className="form-label">
+                Waktu selesai
+              </label>
               <input
                 id="activity-end-time"
                 className="form-input"

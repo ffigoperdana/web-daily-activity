@@ -8,18 +8,18 @@
  */
 /** Response shape for GET /settings when a reminder is configured. */
 export interface SettingsConfigured {
-    configured: true;
-    time: string;
-    timezone: string;
+  configured: true;
+  time: string;
+  timezone: string;
 }
 /** Response shape for GET /settings when no reminder is configured. */
 export interface SettingsNotConfigured {
-    configured: false;
+  configured: false;
 }
 export type SettingsResponse = SettingsConfigured | SettingsNotConfigured;
 /** Common success response from mutating endpoints. */
 export interface OkResponse {
-    ok: boolean;
+  ok: boolean;
 }
 /**
  * GET /settings — retrieve the current reminder settings.
@@ -31,14 +31,20 @@ export declare function getSettings(idToken: string): Promise<SettingsResponse>;
 /**
  * POST /settings — save reminder time and timezone.
  */
-export declare function postSettings(idToken: string, body: {
+export declare function postSettings(
+  idToken: string,
+  body: {
     time: string;
     timezone: string;
-}): Promise<OkResponse>;
+  },
+): Promise<OkResponse>;
 /**
  * POST /subscribe — register a Web Push subscription.
  */
-export declare function postSubscribe(idToken: string, subscription: PushSubscriptionJSON): Promise<OkResponse>;
+export declare function postSubscribe(
+  idToken: string,
+  subscription: PushSubscriptionJSON,
+): Promise<OkResponse>;
 /**
  * DELETE /subscribe — remove a Web Push subscription by endpoint.
  */

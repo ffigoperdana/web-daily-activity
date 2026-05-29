@@ -175,9 +175,7 @@ test.describe('Happy Path', () => {
 
     // 4. See confirmation (Req 3.5)
     await expect(page.getByTestId('confirmation')).toBeVisible({ timeout: 5000 });
-    await expect(page.getByTestId('confirmation')).toContainText(
-      'Aktivitas berhasil disimpan',
-    );
+    await expect(page.getByTestId('confirmation')).toContainText('Aktivitas berhasil disimpan');
 
     // 5. Navigate to reminders (Req 5.1)
     await page.goto('/?route=reminders');
@@ -195,10 +193,7 @@ test.describe('Happy Path', () => {
 });
 
 test.describe('Offline Smoke Test', () => {
-  test('shows offline banner when network is unavailable (Req 4.4)', async ({
-    page,
-    context,
-  }) => {
+  test('shows offline banner when network is unavailable (Req 4.4)', async ({ page, context }) => {
     // Inject GIS mock
     await page.addInitScript({ content: getGisMockScript() });
 

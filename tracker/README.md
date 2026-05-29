@@ -11,11 +11,11 @@ A Vite + React 18 + TypeScript Progressive Web App that logs daily activities to
 
 Create a `.env` file in the project root (or set these in your hosting platform's dashboard):
 
-| Variable | Description |
-|---|---|
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth 2.0 client ID (from Google Cloud Console) |
-| `VITE_OWNER_EMAIL` | The single allowed Google account email |
-| `VITE_VAPID_PUBLIC_KEY` | VAPID public key (base64url) for Web Push subscription |
+| Variable                | Description                                                        |
+| ----------------------- | ------------------------------------------------------------------ |
+| `VITE_GOOGLE_CLIENT_ID` | Google OAuth 2.0 client ID (from Google Cloud Console)             |
+| `VITE_OWNER_EMAIL`      | The single allowed Google account email                            |
+| `VITE_VAPID_PUBLIC_KEY` | VAPID public key (base64url) for Web Push subscription             |
 | `VITE_PUSH_SERVICE_URL` | Base URL of the Push_Service (e.g. `https://dat-push.workers.dev`) |
 
 All variables are required at build time and are baked into the production bundle.

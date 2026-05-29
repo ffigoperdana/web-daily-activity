@@ -8,9 +8,7 @@ export function RemindersScreen() {
   const { status, getIdToken } = useAuth();
 
   const [time, setTime] = useState('08:00');
-  const [timezone, setTimezone] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-  );
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
   const [loading, setLoading] = useState(true);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
@@ -43,7 +41,9 @@ export function RemindersScreen() {
     };
 
     void loadSettings();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [status, getIdToken]);
 
   useEffect(() => {
@@ -134,7 +134,9 @@ export function RemindersScreen() {
         <h2 className="section-title">Jam Pengingat</h2>
 
         <div className="form-group">
-          <label htmlFor="reminder-time" className="form-label">Waktu</label>
+          <label htmlFor="reminder-time" className="form-label">
+            Waktu
+          </label>
           <input
             id="reminder-time"
             className="form-input"
@@ -146,7 +148,9 @@ export function RemindersScreen() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="reminder-timezone" className="form-label">Timezone</label>
+          <label htmlFor="reminder-timezone" className="form-label">
+            Timezone
+          </label>
           <input
             id="reminder-timezone"
             className="form-input mono"

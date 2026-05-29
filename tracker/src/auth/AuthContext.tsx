@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { loadGisScript } from './gis-loader';
 import type { TokenClient, TokenResponse, CredentialResponse } from './gis-types';
@@ -101,9 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         scope: 'https://www.googleapis.com/auth/calendar.events',
         callback: (response: TokenResponse) => {
           if (response.error) {
-            accessTokenRejectRef.current?.(
-              new Error(response.error_description ?? response.error),
-            );
+            accessTokenRejectRef.current?.(new Error(response.error_description ?? response.error));
             accessTokenRejectRef.current = null;
             accessTokenResolveRef.current = null;
             return;

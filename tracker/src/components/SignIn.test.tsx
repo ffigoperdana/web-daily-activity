@@ -83,7 +83,10 @@ describe('SignIn', () => {
 
   it('clears error on subsequent sign-in attempt', async () => {
     mockAuth.status = 'signed-out';
-    mockAuth.signIn = vi.fn().mockRejectedValueOnce(new Error('first error')).mockResolvedValueOnce(undefined);
+    mockAuth.signIn = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('first error'))
+      .mockResolvedValueOnce(undefined);
     render(<SignIn />);
 
     // First click - error

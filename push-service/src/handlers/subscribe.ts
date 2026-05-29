@@ -59,10 +59,7 @@ export async function handlePostSubscribe(
     return badRequest('missing required subscription fields');
   }
 
-  if (
-    body.expirationTime !== null &&
-    typeof body.expirationTime !== 'number'
-  ) {
+  if (body.expirationTime !== null && typeof body.expirationTime !== 'number') {
     return badRequest('expirationTime must be a number or null');
   }
 

@@ -12,4 +12,8 @@ export type ValidationError =
 
 export type CalendarEvent =
   | { summary: string; start: { date: string }; end: { date: string } }
-  | { summary: string; start: { dateTime: string; timeZone: string }; end: { dateTime: string; timeZone: string } };
+  | {
+      summary: string;
+      start: { dateTime: string; timeZone: string };
+      end: { dateTime: string; timeZone: string };
+    };

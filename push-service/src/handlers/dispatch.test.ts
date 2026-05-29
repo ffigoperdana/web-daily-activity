@@ -154,15 +154,11 @@ describe('dispatchCore', () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toEqual({ ok: true, sent: 1, failed: 0, removed: 0 });
-    expect(mockSendPush).toHaveBeenCalledWith(
-      subscription,
-      JSON.stringify({ type: 'reminder' }),
-      {
-        publicKey: 'vapid-pub',
-        privateKey: 'vapid-priv',
-        subject: 'mailto:owner@example.com',
-      },
-    );
+    expect(mockSendPush).toHaveBeenCalledWith(subscription, JSON.stringify({ type: 'reminder' }), {
+      publicKey: 'vapid-pub',
+      privateKey: 'vapid-priv',
+      subject: 'mailto:owner@example.com',
+    });
   });
 
   it('deletes subscription from KV when sendPush returns 404 (Requirement 6.10)', async () => {

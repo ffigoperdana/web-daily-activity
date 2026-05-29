@@ -19,7 +19,7 @@
   --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --bg: oklch(14% 0.01 250);
   --surface: oklch(20% 0.012 250);
   --fg: oklch(92% 0.005 250);
@@ -128,7 +128,9 @@ body {
   border: none;
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .tab-btn:hover {
@@ -189,8 +191,8 @@ body {
   border-color: var(--accent);
 }
 
-.form-input[aria-invalid="true"],
-.form-textarea[aria-invalid="true"] {
+.form-input[aria-invalid='true'],
+.form-textarea[aria-invalid='true'] {
   border-color: var(--danger);
 }
 
@@ -199,8 +201,8 @@ body {
   resize: vertical;
 }
 
-.form-input[type="time"],
-.form-input[type="date"] {
+.form-input[type='time'],
+.form-input[type='date'] {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
@@ -214,7 +216,7 @@ body {
   margin-bottom: 16px;
 }
 
-.form-check input[type="checkbox"] {
+.form-check input[type='checkbox'] {
   width: 18px;
   height: 18px;
   accent-color: var(--accent);
@@ -241,7 +243,9 @@ body {
   border-radius: var(--radius);
   border: none;
   cursor: pointer;
-  transition: opacity 0.15s, background 0.15s;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
   text-decoration: none;
 }
 
@@ -487,7 +491,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* --- Time inputs row --- */

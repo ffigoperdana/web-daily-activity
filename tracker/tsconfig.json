@@ -10,6 +10,12 @@
     }
   },
   "include": ["src/**/*", "vite.config.ts", "vitest.config.ts"],
-  "exclude": ["src/sw/service-worker.ts", "src/sw/workbox.d.ts", "src/**/*.test.*", "src/**/*.spec.*", "tests/**"],
+  "exclude": [
+    "src/sw/service-worker.ts",
+    "src/sw/workbox.d.ts",
+    "src/**/*.test.*",
+    "src/**/*.spec.*",
+    "tests/**"
+  ],
   "references": [{ "path": "./tsconfig.sw.json" }]
 }

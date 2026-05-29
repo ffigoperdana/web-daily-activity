@@ -98,48 +98,48 @@ This runs `wrangler deploy` which publishes the worker to Cloudflare's edge netw
 
 ### Public Variables (`[vars]` in `wrangler.toml`)
 
-| Variable | Purpose |
-|---|---|
+| Variable           | Purpose                                                          |
+| ------------------ | ---------------------------------------------------------------- |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID used to verify ID tokens (audience claim) |
-| `OWNER_EMAIL` | The single allowed Google account email address |
-| `VAPID_PUBLIC_KEY` | VAPID public key for signing push messages |
-| `VAPID_SUBJECT` | VAPID subject identifier, typically `mailto:<owner-email>` |
+| `OWNER_EMAIL`      | The single allowed Google account email address                  |
+| `VAPID_PUBLIC_KEY` | VAPID public key for signing push messages                       |
+| `VAPID_SUBJECT`    | VAPID subject identifier, typically `mailto:<owner-email>`       |
 
 ### Secrets (set via `wrangler secret put`)
 
-| Secret | Purpose |
-|---|---|
-| `VAPID_PRIVATE_KEY` | Private key for signing VAPID JWTs (never exposed to the browser) |
-| `DISPATCH_SECRET` | Shared secret required by `POST /dispatch` to authorize cron-triggered push sends |
+| Secret              | Purpose                                                                           |
+| ------------------- | --------------------------------------------------------------------------------- |
+| `VAPID_PRIVATE_KEY` | Private key for signing VAPID JWTs (never exposed to the browser)                 |
+| `DISPATCH_SECRET`   | Shared secret required by `POST /dispatch` to authorize cron-triggered push sends |
 
 ### KV Binding
 
-| Binding | Purpose |
-|---|---|
-| `KV` | Cloudflare KV namespace storing push subscriptions and reminder settings |
+| Binding | Purpose                                                                  |
+| ------- | ------------------------------------------------------------------------ |
+| `KV`    | Cloudflare KV namespace storing push subscriptions and reminder settings |
 
 ## Scripts
 
-| Script | Command | Description |
-|---|---|---|
-| `pnpm dev` | `wrangler dev` | Start local development server |
-| `pnpm deploy` | `wrangler deploy` | Deploy to Cloudflare Workers |
-| `pnpm test` | `vitest --run` | Run all tests |
-| `pnpm test:property` | `vitest --run tests/properties` | Run property-based tests only |
-| `pnpm test:integration` | `vitest --run tests/integration` | Run integration tests only |
-| `pnpm secret:vapid` | `wrangler secret put VAPID_PRIVATE_KEY` | Set the VAPID private key secret |
-| `pnpm secret:dispatch` | `wrangler secret put DISPATCH_SECRET` | Set the dispatch secret |
+| Script                  | Command                                 | Description                      |
+| ----------------------- | --------------------------------------- | -------------------------------- |
+| `pnpm dev`              | `wrangler dev`                          | Start local development server   |
+| `pnpm deploy`           | `wrangler deploy`                       | Deploy to Cloudflare Workers     |
+| `pnpm test`             | `vitest --run`                          | Run all tests                    |
+| `pnpm test:property`    | `vitest --run tests/properties`         | Run property-based tests only    |
+| `pnpm test:integration` | `vitest --run tests/integration`        | Run integration tests only       |
+| `pnpm secret:vapid`     | `wrangler secret put VAPID_PRIVATE_KEY` | Set the VAPID private key secret |
+| `pnpm secret:dispatch`  | `wrangler secret put DISPATCH_SECRET`   | Set the dispatch secret          |
 
 ## API Endpoints
 
-| Method | Path | Auth | Purpose |
-|---|---|---|---|
-| `POST` | `/subscribe` | Bearer ID token | Store a Web Push subscription |
-| `DELETE` | `/subscribe` | Bearer ID token | Remove a subscription |
-| `GET` | `/settings` | Bearer ID token | Read reminder time and timezone |
-| `POST` | `/settings` | Bearer ID token | Save reminder time and timezone |
-| `POST` | `/dispatch` | `X-Dispatch-Secret` header | Cron-triggered push dispatch |
-| `POST` | `/dispatch/test` | Bearer ID token | Force-send a test push notification |
+| Method   | Path             | Auth                       | Purpose                             |
+| -------- | ---------------- | -------------------------- | ----------------------------------- |
+| `POST`   | `/subscribe`     | Bearer ID token            | Store a Web Push subscription       |
+| `DELETE` | `/subscribe`     | Bearer ID token            | Remove a subscription               |
+| `GET`    | `/settings`      | Bearer ID token            | Read reminder time and timezone     |
+| `POST`   | `/settings`      | Bearer ID token            | Save reminder time and timezone     |
+| `POST`   | `/dispatch`      | `X-Dispatch-Secret` header | Cron-triggered push dispatch        |
+| `POST`   | `/dispatch/test` | Bearer ID token            | Force-send a test push notification |
 
 ## Generating VAPID Keys
 

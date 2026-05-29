@@ -104,10 +104,7 @@ export async function postSubscribe(
 /**
  * DELETE /subscribe — remove a Web Push subscription by endpoint.
  */
-export async function deleteSubscribe(
-  idToken: string,
-  endpoint: string,
-): Promise<OkResponse> {
+export async function deleteSubscribe(idToken: string, endpoint: string): Promise<OkResponse> {
   const response = await fetch(`${getPushServiceUrl()}/subscribe`, {
     method: 'DELETE',
     headers: authHeaders(idToken),

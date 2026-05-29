@@ -38,10 +38,7 @@ interface StoredSettings {
  * shouldDispatch(new Date('2025-01-15T08:00:00Z'), { time: '15:00', timezone: 'Asia/Jakarta' })
  * // => true
  */
-export function shouldDispatch(
-  now: Date,
-  settings: { time: string; timezone: string },
-): boolean {
+export function shouldDispatch(now: Date, settings: { time: string; timezone: string }): boolean {
   const formatted = new Intl.DateTimeFormat('en-GB', {
     timeZone: settings.timezone,
     hour12: false,

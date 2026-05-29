@@ -25,10 +25,7 @@ const TIME_RE = /^([01]\d|2[0-3]):([0-5]\d)$/;
  * Returns { configured: false } if no settings exist,
  * or { configured: true, time, timezone } if they do.
  */
-export async function getSettings(
-  store: KvStore,
-  ownerEmail: string,
-): Promise<Response> {
+export async function getSettings(store: KvStore, ownerEmail: string): Promise<Response> {
   const settings = await store.getJson<StoredSettings>(settingsKey(ownerEmail));
 
   if (!settings) {

@@ -5,20 +5,22 @@
  */
 const GIS_SRC = 'https://accounts.google.com/gsi/client';
 export function loadGisScript() {
-    return new Promise((resolve, reject) => {
-        // If the script tag already exists, resolve immediately.
-        const existing = document.querySelector(`script[src="${GIS_SRC}"]`);
-        if (existing) {
-            resolve();
-            return;
-        }
-        const script = document.createElement('script');
-        script.src = GIS_SRC;
-        script.async = true;
-        script.defer = true;
-        script.addEventListener('load', () => resolve());
-        script.addEventListener('error', () => reject(new Error(`Failed to load GIS script: ${GIS_SRC}`)));
-        document.head.appendChild(script);
-    });
+  return new Promise((resolve, reject) => {
+    // If the script tag already exists, resolve immediately.
+    const existing = document.querySelector(`script[src="${GIS_SRC}"]`);
+    if (existing) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = GIS_SRC;
+    script.async = true;
+    script.defer = true;
+    script.addEventListener('load', () => resolve());
+    script.addEventListener('error', () =>
+      reject(new Error(`Failed to load GIS script: ${GIS_SRC}`)),
+    );
+    document.head.appendChild(script);
+  });
 }
 //# sourceMappingURL=gis-loader.js.map

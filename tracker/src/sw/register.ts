@@ -77,10 +77,7 @@ export function registerServiceWorker(): void {
         installing.addEventListener('statechange', () => {
           // A new SW has installed while a controller already exists →
           // this means an update is available (not the first install).
-          if (
-            installing.state === 'installed' &&
-            navigator.serviceWorker.controller
-          ) {
+          if (installing.state === 'installed' && navigator.serviceWorker.controller) {
             waitingRegistration = registration;
             notifyListeners();
           }

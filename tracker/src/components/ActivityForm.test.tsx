@@ -113,7 +113,10 @@ describe('ActivityForm', () => {
     // Make insertEvent hang until we resolve it
     let resolveInsert!: (value: { ok: true; eventId: string }) => void;
     mockInsertEvent.mockImplementation(
-      () => new Promise((resolve) => { resolveInsert = resolve; }),
+      () =>
+        new Promise((resolve) => {
+          resolveInsert = resolve;
+        }),
     );
 
     render(<ActivityForm />);
@@ -165,9 +168,7 @@ describe('ActivityForm', () => {
     fireEvent.click(screen.getByTestId('submit-button'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('submit-error')).toHaveTextContent(
-        'Internal Server Error',
-      );
+      expect(screen.getByTestId('submit-error')).toHaveTextContent('Internal Server Error');
     });
 
     // Values retained

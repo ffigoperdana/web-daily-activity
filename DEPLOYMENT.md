@@ -50,6 +50,7 @@ Jenkins (https://jenkins.fgdev.tech)
 ### 2. Configure Node.js Tool
 
 Go to **Manage Jenkins → Tools → NodeJS installations**:
+
 - Name: `node-20`
 - Version: 20.x
 - Install automatically: Yes
@@ -58,14 +59,14 @@ Go to **Manage Jenkins → Tools → NodeJS installations**:
 
 Go to **Manage Jenkins → Credentials → System → Global credentials**:
 
-| ID | Type | Description |
-|---|---|---|
-| `coolify-api-token` | Secret text | Coolify API token (from Coolify Settings → API) |
-| `coolify-app-uuid` | Secret text | UUID of the Tracker app in Coolify |
-| `cloudflare-api-token` | Secret text | Cloudflare API token with Workers write permission |
-| `vite-google-client-id` | Secret text | Google OAuth client ID |
-| `vite-owner-email` | Secret text | Owner email address |
-| `vite-vapid-public-key` | Secret text | VAPID public key (base64url) |
+| ID                      | Type        | Description                                                     |
+| ----------------------- | ----------- | --------------------------------------------------------------- |
+| `coolify-api-token`     | Secret text | Coolify API token (from Coolify Settings → API)                 |
+| `coolify-app-uuid`      | Secret text | UUID of the Tracker app in Coolify                              |
+| `cloudflare-api-token`  | Secret text | Cloudflare API token with Workers write permission              |
+| `vite-google-client-id` | Secret text | Google OAuth client ID                                          |
+| `vite-owner-email`      | Secret text | Owner email address                                             |
+| `vite-vapid-public-key` | Secret text | VAPID public key (base64url)                                    |
 | `vite-push-service-url` | Secret text | Push Service URL (e.g., `https://dat-push-service.workers.dev`) |
 
 ### 4. Create Pipeline Job
@@ -80,6 +81,7 @@ Go to **Manage Jenkins → Credentials → System → Global credentials**:
 8. **Poll SCM** (optional): `H/5 * * * *` (check every 5 minutes)
 
 Or use a **GitHub webhook** to trigger on push:
+
 - In GitHub repo → Settings → Webhooks → Add webhook
 - Payload URL: `https://jenkins.fgdev.tech/github-webhook/`
 - Content type: `application/json`
@@ -113,21 +115,25 @@ These are passed as Docker `ARG` during build. Vite bakes them into the JS bundl
 ### 3. Configure Domain
 
 In Coolify app settings → **Settings**:
+
 - Domain: `daily.fgdev.tech`
 - Port: `80`
 
 ### 4. Disable Auto-Deploy
 
 Since Jenkins triggers deploys:
+
 - Uncheck **Auto Deploy** in Coolify app settings
 
 ### 5. Get API Token and App UUID
 
 **API Token:**
+
 - Coolify → Settings → API → Generate Token
 - Save as Jenkins credential `coolify-api-token`
 
 **App UUID:**
+
 - Coolify → Your App → Settings → look for the UUID in the URL or settings panel
 - Save as Jenkins credential `coolify-app-uuid`
 
@@ -217,17 +223,21 @@ curl -X POST http://100.69.245.47:8000/api/v1/deploy \
 ## Troubleshooting
 
 ### Build fails in Coolify
+
 - Check build arguments are set correctly
 - Verify the Dockerfile builds locally: `docker build --build-arg VITE_GOOGLE_CLIENT_ID=test ...`
 
 ### Push_Service deploy fails
+
 - Verify `CLOUDFLARE_API_TOKEN` has Workers write permission
 - Check `wrangler.toml` has correct KV namespace ID
 
 ### Jenkins can't reach Coolify
+
 - Verify Tailscale is connected on both machines
 - Test: `curl http://100.69.245.47:8000/api/v1/version -H "Authorization: Bearer <token>"`
 
 ### Service Worker not updating
+
 - The nginx config sets `Cache-Control: no-store` on `/sw.js`
 - Users will see the "versi baru tersedia" toast on next visit after deploy

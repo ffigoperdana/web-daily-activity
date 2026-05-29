@@ -3,12 +3,14 @@
 ## Apakah Perlu Firebase?
 
 **TIDAK.** Aplikasi ini tidak menggunakan Firebase sama sekali:
+
 - Auth → Google Identity Services (GIS) langsung, bukan Firebase Auth
 - Push Notifications → Web Push API + VAPID keys sendiri, bukan Firebase Cloud Messaging (FCM)
 - Database → Google Calendar API sebagai storage, bukan Firestore
 - Hosting → Coolify/Docker, bukan Firebase Hosting
 
 Yang kamu butuhkan hanya:
+
 1. **Google Cloud Console** — untuk OAuth Client ID (gratis)
 2. **Terminal** — untuk generate VAPID keys (gratis)
 3. **Cloudflare** — untuk Push_Service Workers (gratis)
@@ -245,26 +247,26 @@ DISPATCH_SECRET=
 
 ## Ringkasan: Di Mana Apa
 
-| Apa | Di mana | Commit ke repo? |
-|---|---|---|
-| `VITE_GOOGLE_CLIENT_ID` | `.env` | ✅ Ya (public, baked ke JS) |
-| `VITE_OWNER_EMAIL` | `.env` | ✅ Ya |
-| `VITE_VAPID_PUBLIC_KEY` | `.env` | ✅ Ya (public key, aman) |
-| `VITE_PUSH_SERVICE_URL` | `.env` | ✅ Ya |
-| `GOOGLE_CLIENT_ID` | `wrangler.toml` [vars] | ✅ Ya |
-| `OWNER_EMAIL` | `wrangler.toml` [vars] | ✅ Ya |
-| `VAPID_PUBLIC_KEY` | `wrangler.toml` [vars] | ✅ Ya |
-| `VAPID_SUBJECT` | `wrangler.toml` [vars] | ✅ Ya |
-| `VAPID_PRIVATE_KEY` | `wrangler secret put` | ❌ Tidak |
-| `DISPATCH_SECRET` | `wrangler secret put` | ❌ Tidak |
-| `COOLIFY_TOKEN` | Jenkins Credentials | ❌ Tidak |
-| `CLOUDFLARE_API_TOKEN` | Jenkins Credentials | ❌ Tidak |
+| Apa                     | Di mana                | Commit ke repo?             |
+| ----------------------- | ---------------------- | --------------------------- |
+| `VITE_GOOGLE_CLIENT_ID` | `.env`                 | ✅ Ya (public, baked ke JS) |
+| `VITE_OWNER_EMAIL`      | `.env`                 | ✅ Ya                       |
+| `VITE_VAPID_PUBLIC_KEY` | `.env`                 | ✅ Ya (public key, aman)    |
+| `VITE_PUSH_SERVICE_URL` | `.env`                 | ✅ Ya                       |
+| `GOOGLE_CLIENT_ID`      | `wrangler.toml` [vars] | ✅ Ya                       |
+| `OWNER_EMAIL`           | `wrangler.toml` [vars] | ✅ Ya                       |
+| `VAPID_PUBLIC_KEY`      | `wrangler.toml` [vars] | ✅ Ya                       |
+| `VAPID_SUBJECT`         | `wrangler.toml` [vars] | ✅ Ya                       |
+| `VAPID_PRIVATE_KEY`     | `wrangler secret put`  | ❌ Tidak                    |
+| `DISPATCH_SECRET`       | `wrangler secret put`  | ❌ Tidak                    |
+| `COOLIFY_TOKEN`         | Jenkins Credentials    | ❌ Tidak                    |
+| `CLOUDFLARE_API_TOKEN`  | Jenkins Credentials    | ❌ Tidak                    |
 
 ---
 
 ## FAQ
 
-**Q: Kenapa VITE_* aman di-commit?**
+**Q: Kenapa VITE\_\* aman di-commit?**
 A: Karena Vite bakes mereka ke dalam JavaScript bundle. Siapapun yang buka app kamu di browser bisa lihat nilai-nilai ini di source code. Mereka memang public by design (client ID, public key).
 
 **Q: Kalau aku ganti email owner, apa yang perlu diupdate?**

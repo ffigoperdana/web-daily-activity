@@ -135,9 +135,9 @@ describe('Push_Service client', () => {
         new Response('forbidden', { status: 403, statusText: 'Forbidden' }),
       );
 
-      await expect(
-        postSubscribe(MOCK_TOKEN, { endpoint: '', keys: null }),
-      ).rejects.toThrow('postSubscribe failed: 403 Forbidden');
+      await expect(postSubscribe(MOCK_TOKEN, { endpoint: '', keys: null })).rejects.toThrow(
+        'postSubscribe failed: 403 Forbidden',
+      );
     });
   });
 

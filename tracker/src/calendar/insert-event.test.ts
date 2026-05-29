@@ -26,10 +26,7 @@ describe('insertEvent', () => {
 
   it('returns ok with eventId on 200', async () => {
     const auth = mockAuth();
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(jsonResponse(200, { id: 'evt_123' })),
-    );
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse(200, { id: 'evt_123' })));
 
     const result = await insertEvent(samplePayload, auth);
 
@@ -72,9 +69,7 @@ describe('insertEvent', () => {
       vi
         .fn()
         .mockResolvedValueOnce(jsonResponse(401, {}))
-        .mockResolvedValueOnce(
-          jsonResponse(403, { error: { message: 'Forbidden' } }),
-        ),
+        .mockResolvedValueOnce(jsonResponse(403, { error: { message: 'Forbidden' } })),
     );
 
     const result = await insertEvent(samplePayload, auth);
@@ -88,11 +83,7 @@ describe('insertEvent', () => {
     const auth = mockAuth();
     vi.stubGlobal(
       'fetch',
-      vi
-        .fn()
-        .mockResolvedValue(
-          jsonResponse(500, { error: { message: 'Internal error' } }),
-        ),
+      vi.fn().mockResolvedValue(jsonResponse(500, { error: { message: 'Internal error' } })),
     );
 
     const result = await insertEvent(samplePayload, auth);
@@ -122,10 +113,7 @@ describe('insertEvent', () => {
 
   it('sends correct Authorization header and JSON body', async () => {
     const auth = mockAuth('my-token');
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(jsonResponse(200, { id: 'evt_789' })),
-    );
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse(200, { id: 'evt_789' })));
 
     await insertEvent(samplePayload, auth);
 

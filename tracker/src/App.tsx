@@ -93,7 +93,12 @@ function AppShell() {
   if (status === 'loading') {
     return (
       <div className="app-container">
-        <div className="loading-screen" data-testid="sign-in-loading" role="status" aria-busy="true">
+        <div
+          className="loading-screen"
+          data-testid="sign-in-loading"
+          role="status"
+          aria-busy="true"
+        >
           <div className="spinner" />
         </div>
       </div>
@@ -124,7 +129,12 @@ function AppShell() {
       {updateAvailable && !toastDismissed && (
         <div className="update-toast" data-testid="update-toast" role="status">
           <span>{id.versi_baru_tersedia}</span>
-          <button type="button" className="toast-action" onClick={handleReload} data-testid="btn-reload">
+          <button
+            type="button"
+            className="toast-action"
+            onClick={handleReload}
+            data-testid="btn-reload"
+          >
             {id.muat_ulang}
           </button>
           <button

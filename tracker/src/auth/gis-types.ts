@@ -68,9 +68,7 @@ declare global {
       }
       namespace id {
         function initialize(config: IdConfiguration): void;
-        function prompt(
-          momentListener?: (notification: PromptMomentNotification) => void,
-        ): void;
+        function prompt(momentListener?: (notification: PromptMomentNotification) => void): void;
       }
     }
   }

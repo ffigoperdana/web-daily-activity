@@ -113,7 +113,11 @@ describe('App shell', () => {
   });
 
   it('shows offline banner when navigator.onLine is false', () => {
-    Object.defineProperty(navigator, 'onLine', { value: false, writable: true, configurable: true });
+    Object.defineProperty(navigator, 'onLine', {
+      value: false,
+      writable: true,
+      configurable: true,
+    });
     render(<App />);
     expect(screen.getByTestId('offline-banner')).toHaveTextContent(
       'tidak ada koneksi — coba lagi nanti',
@@ -132,14 +136,22 @@ describe('App shell', () => {
 
     // Simulate going offline
     act(() => {
-      Object.defineProperty(navigator, 'onLine', { value: false, writable: true, configurable: true });
+      Object.defineProperty(navigator, 'onLine', {
+        value: false,
+        writable: true,
+        configurable: true,
+      });
       window.dispatchEvent(new Event('offline'));
     });
     expect(screen.getByTestId('offline-banner')).toBeInTheDocument();
 
     // Simulate going online
     act(() => {
-      Object.defineProperty(navigator, 'onLine', { value: true, writable: true, configurable: true });
+      Object.defineProperty(navigator, 'onLine', {
+        value: true,
+        writable: true,
+        configurable: true,
+      });
       window.dispatchEvent(new Event('online'));
     });
     expect(screen.queryByTestId('offline-banner')).not.toBeInTheDocument();
@@ -173,7 +185,9 @@ describe('App shell', () => {
     });
 
     render(<App />);
-    act(() => { updateCb?.(); });
+    act(() => {
+      updateCb?.();
+    });
 
     fireEvent.click(screen.getByTestId('btn-reload'));
     expect(mockApplyUpdate).toHaveBeenCalledOnce();
@@ -187,7 +201,9 @@ describe('App shell', () => {
     });
 
     render(<App />);
-    act(() => { updateCb?.(); });
+    act(() => {
+      updateCb?.();
+    });
 
     expect(screen.getByTestId('update-toast')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('btn-dismiss-toast'));
@@ -214,9 +230,11 @@ describe('App shell', () => {
 
     // Simulate NAVIGATE message from SW
     act(() => {
-      messageHandler?.(new MessageEvent('message', {
-        data: { type: 'NAVIGATE', route: '/?route=reminders' },
-      }));
+      messageHandler?.(
+        new MessageEvent('message', {
+          data: { type: 'NAVIGATE', route: '/?route=reminders' },
+        }),
+      );
     });
 
     expect(screen.getByTestId('reminders-screen-mock')).toBeInTheDocument();

@@ -5,8 +5,7 @@ export type InsertEventResult =
   | { ok: true; eventId: string }
   | { ok: false; status: number; message: string };
 
-const CALENDAR_API_URL =
-  'https://www.googleapis.com/calendar/v3/calendars/primary/events';
+const CALENDAR_API_URL = 'https://www.googleapis.com/calendar/v3/calendars/primary/events';
 
 export async function insertEvent(
   payload: CalendarEvent,
