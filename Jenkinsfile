@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Coolify API (via Tailscale internal IP)
-        COOLIFY_API_URL    = 'http://100.69.245.47:8000/api/v1'
+        // Coolify API (via Docker host gateway — same VPS)
+        COOLIFY_API_URL    = 'http://host.docker.internal:8000/api/v1'
         COOLIFY_TOKEN      = credentials('coolify-api-token')
         COOLIFY_APP_UUID   = credentials('coolify-app-uuid')
 
