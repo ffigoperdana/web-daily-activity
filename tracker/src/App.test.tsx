@@ -33,6 +33,8 @@ describe('App shell', () => {
   let originalLocation: Location;
 
   beforeEach(() => {
+    localStorage.clear();
+
     mockUseAuth.mockReturnValue({
       status: 'signed-in',
       email: 'owner@example.com',
@@ -88,8 +90,68 @@ describe('App shell', () => {
     });
 
     render(<App />);
+    expect(
+      screen.getByRole('dialog', { name: 'Aplikasi masih dalam tahap beta' }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('sign-in-mock')).toBeInTheDocument();
     expect(screen.queryByTestId('activity-form-mock')).not.toBeInTheDocument();
+  });
+
+  it('shows beta notice with email and WhatsApp links before login', () => {
+    mockUseAuth.mockReturnValue({
+      status: 'signed-out',
+      email: null,
+      signIn: vi.fn(),
+      signOut: vi.fn(),
+      getValidAccessToken: vi.fn(),
+      getIdToken: vi.fn(),
+      retryInit: vi.fn(),
+    });
+
+    render(<App />);
+
+    const emailHref = screen.getByTestId('btn-email').getAttribute('href') ?? '';
+    const emailUrl = new URL(emailHref);
+    const whatsappHref = screen.getByTestId('btn-whatsapp').getAttribute('href') ?? '';
+    const whatsappUrl = new URL(whatsappHref);
+
+    expect(screen.getByTestId('beta-notice-modal')).toBeInTheDocument();
+    expect(emailUrl.protocol).toBe('mailto:');
+    expect(emailUrl.pathname).toBe('perdanaputrafigo@gmail.com');
+    expect(emailUrl.searchParams.get('subject')).toBe(
+      'Permintaan Akses Beta Daily Activity Tracker',
+    );
+    expect(emailUrl.searchParams.get('body')).toContain(
+      'Saya ingin mencoba aplikasi Daily Activity Tracker versi beta.',
+    );
+    expect(whatsappUrl.origin).toBe('https://wa.me');
+    expect(whatsappUrl.pathname).toBe('/6281216195308');
+    expect(whatsappUrl.searchParams.get('text')).toContain(
+      'Permintaan Akses Beta Daily Activity Tracker',
+    );
+  });
+
+  it('persists beta notice dismissal after close', () => {
+    mockUseAuth.mockReturnValue({
+      status: 'signed-out',
+      email: null,
+      signIn: vi.fn(),
+      signOut: vi.fn(),
+      getValidAccessToken: vi.fn(),
+      getIdToken: vi.fn(),
+      retryInit: vi.fn(),
+    });
+
+    const { unmount } = render(<App />);
+    fireEvent.click(screen.getByTestId('btn-close-beta-notice'));
+
+    expect(screen.queryByTestId('beta-notice-modal')).not.toBeInTheDocument();
+    expect(localStorage.getItem('tracker-beta-notice-dismissed')).toBe('true');
+
+    unmount();
+    render(<App />);
+
+    expect(screen.queryByTestId('beta-notice-modal')).not.toBeInTheDocument();
   });
 
   it('renders ActivityForm by default when signed in and route=form', () => {

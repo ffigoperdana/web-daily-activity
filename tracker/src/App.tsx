@@ -9,11 +9,80 @@ import './styles.css';
 
 type Route = 'form' | 'reminders';
 
+const BETA_NOTICE_STORAGE_KEY = 'tracker-beta-notice-dismissed';
+const CONTACT_EMAIL = 'perdanaputrafigo@gmail.com';
+const CONTACT_WHATSAPP = '6281216195308';
+const CONTACT_SUBJECT = 'Permintaan Akses Beta Daily Activity Tracker';
+const CONTACT_MESSAGE = [
+  'Halo Figo,',
+  '',
+  'Saya ingin mencoba aplikasi Daily Activity Tracker versi beta.',
+  'Email login yang ingin digunakan:',
+  'Nama:',
+  '',
+  'Terima kasih.',
+].join('\n');
+const CONTACT_EMAIL_URL = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+  CONTACT_SUBJECT,
+)}&body=${encodeURIComponent(CONTACT_MESSAGE)}`;
+const CONTACT_WHATSAPP_URL = `https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent(
+  `${CONTACT_SUBJECT}\n\n${CONTACT_MESSAGE}`,
+)}`;
+
 function parseRoute(): Route {
   const params = new URLSearchParams(window.location.search);
   const route = params.get('route');
   if (route === 'reminders') return 'reminders';
   return 'form';
+}
+
+function BetaNoticeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null;
+
+  return (
+    <div className="modal-backdrop" role="presentation" data-testid="beta-notice-modal">
+      <section
+        className="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="beta-notice-title"
+      >
+        <button
+          type="button"
+          className="modal-close"
+          onClick={onClose}
+          aria-label="tutup informasi beta"
+          data-testid="btn-close-beta-notice"
+        >
+          x
+        </button>
+
+        <p className="modal-eyebrow">Beta Version</p>
+        <h2 id="beta-notice-title" className="modal-title">
+          Aplikasi masih dalam tahap beta
+        </h2>
+        <p className="modal-copy">
+          Untuk saat ini akses login masih dibatasi. Kalau ingin mencoba aplikasi ini, silakan
+          hubungi Figo lewat email atau WhatsApp.
+        </p>
+
+        <div className="modal-actions">
+          <a className="btn btn-primary" href={CONTACT_EMAIL_URL} data-testid="btn-email">
+            Email
+          </a>
+          <a
+            className="btn btn-secondary"
+            href={CONTACT_WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            data-testid="btn-whatsapp"
+          >
+            WhatsApp
+          </a>
+        </div>
+      </section>
+    </div>
+  );
 }
 
 function ThemeToggle() {
@@ -46,6 +115,9 @@ function AppShell() {
   const [offline, setOffline] = useState(!navigator.onLine);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [toastDismissed, setToastDismissed] = useState(false);
+  const [showBetaNotice, setShowBetaNotice] = useState(() => {
+    return localStorage.getItem(BETA_NOTICE_STORAGE_KEY) !== 'true';
+  });
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
@@ -90,9 +162,17 @@ function AppShell() {
     applyUpdate();
   }, []);
 
+  const handleCloseBetaNotice = useCallback(() => {
+    localStorage.setItem(BETA_NOTICE_STORAGE_KEY, 'true');
+    setShowBetaNotice(false);
+  }, []);
+
+  const betaNotice = <BetaNoticeModal open={showBetaNotice} onClose={handleCloseBetaNotice} />;
+
   if (status === 'loading') {
     return (
       <div className="app-container">
+        {betaNotice}
         <div
           className="loading-screen"
           data-testid="sign-in-loading"
@@ -108,6 +188,7 @@ function AppShell() {
   if (status !== 'signed-in') {
     return (
       <div className="app-container">
+        {betaNotice}
         {offline && (
           <div className="offline-banner" data-testid="offline-banner" role="alert">
             {id.tidak_ada_koneksi}
@@ -120,6 +201,7 @@ function AppShell() {
 
   return (
     <div className="app-container">
+      {betaNotice}
       {offline && (
         <div className="offline-banner" data-testid="offline-banner" role="alert">
           {id.tidak_ada_koneksi}
