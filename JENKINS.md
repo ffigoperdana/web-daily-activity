@@ -1,6 +1,7 @@
 # Jenkins + Coolify CI/CD — Step by Step from Scratch
 
 This guide assumes:
+
 - Jenkins is already running in Coolify at `https://jenkins.fgdev.tech`
 - Jenkins container is connected to the `coolify` Docker network
 - Coolify is accessible from Jenkins at `http://coolify:8080`
@@ -37,10 +38,10 @@ This guide assumes:
 
 In Jenkins → **Manage Jenkins → Credentials → System → Global credentials → Add Credentials**:
 
-| ID | Kind | Value |
-|---|---|---|
+| ID                  | Kind        | Value                     |
+| ------------------- | ----------- | ------------------------- |
 | `coolify-api-token` | Secret text | The API token from Step 2 |
-| `coolify-app-uuid` | Secret text | The UUID from Step 1 |
+| `coolify-app-uuid`  | Secret text | The UUID from Step 1      |
 
 Add any other credentials your pipeline needs (e.g., `cloudflare-api-token` for Workers deploy).
 
@@ -168,6 +169,7 @@ For auto-trigger on push:
 6. Click **Add webhook**
 
 ### Verify:
+
 - Push a commit to `main`
 - Check GitHub webhook → Recent Deliveries → should show green ✓
 - Check Jenkins → job should start building
@@ -188,31 +190,37 @@ For auto-trigger on push:
 ## Troubleshooting
 
 ### Webhook delivered but Jenkins doesn't trigger
+
 - Verify plugin "Multibranch Scan Webhook Trigger" is installed
 - Verify trigger token matches between Jenkins config and GitHub webhook URL
 - Check Jenkins logs: Manage Jenkins → System Log
 
 ### Jenkins can't reach Coolify API (timeout/connection refused)
+
 - Jenkins container must be on the `coolify` Docker network
 - Test from Jenkins terminal: `curl http://coolify:8080/api/v1/version`
 - If not connected: `docker network connect coolify <jenkins-container-name>`
 - Coolify internal port is `8080` (not 8000 — that's the host mapping)
 
 ### Coolify API returns 401/Unauthenticated
+
 - Verify `coolify-api-token` credential is correct
 - Regenerate token in Coolify if expired
 
 ### Coolify API returns 404 on deploy
+
 - Verify `coolify-app-uuid` is correct
 - The UUID is the service UUID, not the project UUID
 - Check Coolify API docs: the endpoint might be `/applications/<uuid>/restart` depending on version
 
 ### Deploy succeeds but app doesn't update
+
 - Check Coolify deployment logs for build errors
 - Verify Dockerfile builds correctly
 - Check environment variables are set in Coolify
 
 ### Node.js not found in Jenkins
+
 - Manage Jenkins → Tools → NodeJS installations
 - Add: name `node-20`, version 20.x, auto-install checked
 
@@ -220,13 +228,13 @@ For auto-trigger on push:
 
 ## Quick Reference
 
-| What | Where |
-|---|---|
-| Jenkins URL | `https://jenkins.fgdev.tech` |
-| Coolify internal URL (from Jenkins) | `http://coolify:8080` |
-| Coolify dashboard | `http://100.69.245.47:8000` (Tailscale) |
-| Webhook URL pattern | `https://jenkins.fgdev.tech/multibranch-webhook-trigger/invoke?token=<TOKEN>` |
-| Coolify deploy API | `POST http://coolify:8080/api/v1/deploy` with `{"uuid": "<APP_UUID>", "force_rebuild": true}` |
+| What                                | Where                                                                                         |
+| ----------------------------------- | --------------------------------------------------------------------------------------------- |
+| Jenkins URL                         | `https://jenkins.fgdev.tech`                                                                  |
+| Coolify internal URL (from Jenkins) | `http://coolify:8080`                                                                         |
+| Coolify dashboard                   | `http://100.69.245.47:8000` (Tailscale)                                                       |
+| Webhook URL pattern                 | `https://jenkins.fgdev.tech/multibranch-webhook-trigger/invoke?token=<TOKEN>`                 |
+| Coolify deploy API                  | `POST http://coolify:8080/api/v1/deploy` with `{"uuid": "<APP_UUID>", "force_rebuild": true}` |
 
 ---
 

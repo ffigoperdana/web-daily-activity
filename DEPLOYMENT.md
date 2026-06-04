@@ -53,6 +53,7 @@ Static PWA served
 ### GitHub Actions (`.github/workflows/ci.yml`)
 
 Runs on every push/PR to `main`:
+
 - **Unit & Property Tests** — runs `pnpm test:unit` and `pnpm test:property` for both packages
 - **Integration Tests** — runs only when `push-service/` files change
 - **Nightly** — runs long property tests (numRuns=1000) and Playwright e2e on schedule (02:00 UTC)
@@ -61,13 +62,13 @@ Runs on every push/PR to `main`:
 
 Triggered by GitHub webhook on push to `main`:
 
-| Stage | What it does |
-|---|---|
-| Checkout | Pull latest code from GitHub |
-| Install | `corepack enable` + `pnpm install` |
-| Lint | `pnpm lint` (Prettier check) |
-| Test | Unit tests for Tracker + Push_Service (parallel) |
-| Deploy Tracker | Trigger Coolify redeploy via API |
+| Stage               | What it does                                        |
+| ------------------- | --------------------------------------------------- |
+| Checkout            | Pull latest code from GitHub                        |
+| Install             | `corepack enable` + `pnpm install`                  |
+| Lint                | `pnpm lint` (Prettier check)                        |
+| Test                | Unit tests for Tracker + Push_Service (parallel)    |
+| Deploy Tracker      | Trigger Coolify redeploy via API                    |
 | Deploy Push_Service | `wrangler deploy` (only if `push-service/` changed) |
 
 ## Jenkins Setup
@@ -94,10 +95,10 @@ Triggered by GitHub webhook on push to `main`:
 
 ### Jenkins Credentials
 
-| ID | Type | Value |
-|---|---|---|
-| `coolify-api-token` | Secret text | Coolify API token (Settings → API → Generate) |
-| `coolify-app-uuid` | Secret text | UUID of the Tracker app in Coolify |
+| ID                     | Type        | Value                                                    |
+| ---------------------- | ----------- | -------------------------------------------------------- |
+| `coolify-api-token`    | Secret text | Coolify API token (Settings → API → Generate)            |
+| `coolify-app-uuid`     | Secret text | UUID of the Tracker app in Coolify                       |
 | `cloudflare-api-token` | Secret text | Cloudflare API token (Workers Scripts → Edit permission) |
 
 ### Node.js Tool
@@ -110,15 +111,15 @@ Triggered by GitHub webhook on push to `main`:
 
 ### Tracker Application
 
-| Setting | Value |
-|---|---|
-| Source | Public GitHub repo |
-| Build Pack | Dockerfile |
-| Dockerfile Location | `/Dockerfile` |
-| Base Directory | `/` |
-| Ports Exposes | `80` |
-| Domain | `http://daily.fgdev.tech:80` |
-| Auto Deploy | Disabled (Jenkins triggers) |
+| Setting             | Value                        |
+| ------------------- | ---------------------------- |
+| Source              | Public GitHub repo           |
+| Build Pack          | Dockerfile                   |
+| Dockerfile Location | `/Dockerfile`                |
+| Base Directory      | `/`                          |
+| Ports Exposes       | `80`                         |
+| Domain              | `http://daily.fgdev.tech:80` |
+| Auto Deploy         | Disabled (Jenkins triggers)  |
 
 ### Environment Variables (Production)
 
@@ -136,6 +137,7 @@ These are injected as Docker build ARGs during `docker build`.
 ### Coolify API Access from Jenkins
 
 Jenkins container reaches Coolify via Docker internal network:
+
 - URL: `http://coolify:8080/api/v1`
 - Both containers must be on the same Docker network (`coolify`)
 
@@ -182,31 +184,37 @@ VAPID_SUBJECT = "mailto:<your-email>"
 ## Dockerfile
 
 Multi-stage build:
+
 1. **Builder stage** (node:20-alpine): installs pnpm, copies workspace, builds Vite app with env vars injected as ARGs
 2. **Production stage** (nginx:alpine): copies built `dist/` to nginx, serves as SPA with custom config
 
 ## Troubleshooting
 
 ### Jenkins pipeline fails at Deploy (Coolify)
+
 - Verify Jenkins container is on `coolify` Docker network
 - Test from Jenkins terminal: `curl http://coolify:8080/api/v1/version`
 - Check `coolify-api-token` credential is valid
 
 ### Coolify build fails
+
 - Check "Use Docker Build Secrets" is enabled
 - Verify all 4 `VITE_*` env vars are set in Coolify
 - Check Dockerfile builds locally: `docker build .`
 
 ### Push_Service deploy fails
+
 - Verify `cloudflare-api-token` has Workers Scripts Edit permission
 - Check `wrangler.toml` has valid KV namespace ID
 - Run `npx wrangler whoami` to verify auth
 
 ### CORS errors in browser
+
 - Push_Service must include `Access-Control-Allow-Origin` header
 - Allowed origins: `https://daily.fgdev.tech`, `http://localhost:5173`
 
 ### Service Worker not registering
+
 - SW file must be at `/service-worker.js` (not `/sw.js`)
 - Check DevTools → Application → Service Workers
 - Clear site data and reload after deploy
