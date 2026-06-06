@@ -4,6 +4,15 @@ import { id } from '../i18n/id';
 import { subscribePush } from '../push/subscribe';
 import { getSettings, postSettings, postSubscribe, postDispatchTest } from '../push/client';
 
+/** Check if Web Push is supported on this device/browser. */
+function isPushSupported(): boolean {
+  return (
+    'serviceWorker' in navigator &&
+    'PushManager' in window &&
+    'Notification' in window
+  );
+}
+
 export function RemindersScreen() {
   const { status, getIdToken } = useAuth();
 
@@ -16,6 +25,7 @@ export function RemindersScreen() {
   const [testing, setTesting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [pushSupported] = useState(isPushSupported);
 
   useEffect(() => {
     if (status !== 'signed-in') return;
@@ -176,32 +186,47 @@ export function RemindersScreen() {
       <div className="card">
         <h2 className="section-title">Notifikasi Push</h2>
 
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleSubscribe}
-          disabled={subscribing}
-          data-testid="btn-subscribe"
-          style={{ marginBottom: '12px' }}
-        >
-          {subscribing ? 'Mengaktifkan…' : id.aktifkan_pengingat}
-        </button>
-
-        {permissionDenied && (
-          <div className="alert alert-warn" data-testid="permission-denied-message" role="alert">
-            {id.izinkan_notifikasi}
+        {!pushSupported && (
+          <div className="alert alert-warn" data-testid="push-not-supported">
+            {id.notifikasi_tidak_tersedia}
+            {/iPhone|iPad|iPod/.test(navigator.userAgent) && (
+              <p style={{ marginTop: '8px', fontSize: '0.8125rem' }}>
+                iOS: pastikan app dibuka dari Home Screen (bukan Safari), dan iOS versi 16.4+.
+              </p>
+            )}
           </div>
         )}
 
-        <button
-          type="button"
-          className="btn btn-ghost"
-          onClick={handleTestNotification}
-          disabled={testing}
-          data-testid="btn-test-notification"
-        >
-          {testing ? 'Mengirim…' : id.kirim_notifikasi_tes}
-        </button>
+        {pushSupported && (
+          <>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleSubscribe}
+              disabled={subscribing}
+              data-testid="btn-subscribe"
+              style={{ marginBottom: '12px' }}
+            >
+              {subscribing ? 'Mengaktifkan…' : id.aktifkan_pengingat}
+            </button>
+
+            {permissionDenied && (
+              <div className="alert alert-warn" data-testid="permission-denied-message" role="alert">
+                {id.izinkan_notifikasi}
+              </div>
+            )}
+
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={handleTestNotification}
+              disabled={testing}
+              data-testid="btn-test-notification"
+            >
+              {testing ? 'Mengirim…' : id.kirim_notifikasi_tes}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
