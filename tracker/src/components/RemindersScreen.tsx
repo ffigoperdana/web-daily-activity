@@ -6,11 +6,7 @@ import { getSettings, postSettings, postSubscribe, postDispatchTest } from '../p
 
 /** Check if Web Push is supported on this device/browser. */
 function isPushSupported(): boolean {
-  return (
-    'serviceWorker' in navigator &&
-    'PushManager' in window &&
-    'Notification' in window
-  );
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 }
 
 export function RemindersScreen() {
@@ -211,7 +207,11 @@ export function RemindersScreen() {
             </button>
 
             {permissionDenied && (
-              <div className="alert alert-warn" data-testid="permission-denied-message" role="alert">
+              <div
+                className="alert alert-warn"
+                data-testid="permission-denied-message"
+                role="alert"
+              >
                 {id.izinkan_notifikasi}
               </div>
             )}
